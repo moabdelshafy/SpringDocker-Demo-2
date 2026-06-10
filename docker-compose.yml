@@ -1,0 +1,6 @@
+services:
+  app:
+    image: shefoo/spring-docker-demo-2:latest
+    restart: unless-stopped
+    ports:
+      - "${APP_HOST_PORT:-9090}:8080"
