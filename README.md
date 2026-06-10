@@ -1,6 +1,6 @@
 # SpringDocker-Demo 2
 
-A standalone Spring Boot REST API for testing Docker Hub publishing and Render deployment. It has no database, Redis, or other external runtime dependencies.
+A standalone Spring Boot REST API for testing Docker Hub publishing and Render deployment using Github Actions. It has no database, Redis, or other external runtime dependencies.
 
 ## API
 
