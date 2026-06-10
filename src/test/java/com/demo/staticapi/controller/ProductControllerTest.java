@@ -1,11 +1,11 @@
 package com.demo.staticapi.controller;
 
-import com.demo.staticapi.model.Product;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
+
+import com.demo.staticapi.model.Product;
 
 class ProductControllerTest {
 
@@ -16,8 +16,8 @@ class ProductControllerTest {
         List<Product> products = controller.getProducts();
 
         assertThat(products)
-                .hasSize(3)
+                .hasSize(4)
                 .extracting(Product::name)
-                .containsExactly("Laptop", "Keyboard", "Monitor");
+                .containsExactly("Laptop", "Keyboard", "Monitor","Mouse");
     }
 }
