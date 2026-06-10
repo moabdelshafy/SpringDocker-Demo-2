@@ -12,7 +12,8 @@ Example response:
 [
   {"id": 1, "name": "Laptop"},
   {"id": 2, "name": "Keyboard"},
-  {"id": 3, "name": "Monitor"}
+  {"id": 3, "name": "Monitor"},
+  {"id": 4, "name": "Mouse"}
 ]
 ```
 
@@ -36,16 +37,36 @@ Then open:
 
 `http://localhost:9090/products`
 
-## GitHub Actions and Docker Hub
+## Automated CI/CD
 
-The workflow runs tests, builds the JAR, and publishes this image whenever code is pushed to `master`:
+Whenever code is pushed or merged into `master`, the GitHub Actions workflow:
 
-`shefoo/spring-docker-demo-2:latest`
+1. Builds the application and runs its tests with Maven.
+2. Builds and publishes `shefoo/spring-docker-demo-2:latest` to Docker Hub.
+3. Calls the Render deploy hook after the new Docker image is published.
 
-Before pushing:
+The workflow can also be started manually from the GitHub Actions page.
 
-1. Create the public Docker Hub repository `spring-docker-demo-2`.
-2. Add `DOCKER_USERNAME` and `DOCKER_TOKEN` to the GitHub repository's Actions secrets.
+### Configure Docker Hub Secrets
+
+Create the public Docker Hub repository `spring-docker-demo-2`, then add these GitHub Actions repository secrets:
+
+- `DOCKER_USERNAME`: your Docker Hub username.
+- `DOCKER_TOKEN2`: a Docker Hub access token with permission to push images.
+
+To add each secret, go to:
+
+```text
+Repository
+↓
+Settings
+↓
+Secrets and variables
+↓
+Actions
+↓
+New repository secret
+```
 
 ## Deploy on Render
 
@@ -54,3 +75,37 @@ Create a Render Web Service from:
 `docker.io/shefoo/spring-docker-demo-2:latest`
 
 No environment variables are required. The application automatically uses Render's `PORT` value and defaults to port `8080` everywhere else.
+
+### Configure Automatic Render Deployment
+
+Generate a deploy hook in Render:
+
+```text
+Dashboard
+↓
+Your Service
+↓
+Settings
+↓
+Deploy Hook
+↓
+Generate Deploy Hook
+```
+
+Copy the generated hook URL. In GitHub, go to:
+
+```text
+Repository
+↓
+Settings
+↓
+Secrets and variables
+↓
+Actions
+↓
+New repository secret
+```
+
+Create a secret named `RENDER_DEPLOY_HOOK` and paste the Render deploy-hook URL as its value. The workflow uses this secret to trigger a new Render deployment only after the latest Docker image has been successfully published.
+
+Keep the deploy-hook URL private because anyone with the URL can trigger a deployment.
